@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/data/expense_data.dart';
+import 'package:provider/provider.dart';
+
+import '../models/expense_item.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -20,6 +24,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  final newExpenseNameController = TextEditingController();
+  final newExpenseAmountController = TextEditingController();
 
   void _incrementCounter() {
     setState(() {
@@ -36,10 +42,45 @@ class _MyHomePageState extends State<MyHomePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Add New"),
-      ),
+          title: Text("Add New Expense"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: newExpenseNameController,
+                decoration: InputDecoration(
+                  labelText: "Name",
+                ),
+              ),
+              TextField(
+                controller: newExpenseAmountController,
+                decoration: InputDecoration(
+                  labelText: "Amount",
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            // save button
+            MaterialButton(onPressed: save, child: Text('Save')),
+            // cancel button
+            MaterialButton(onPressed: cancel, child: Text('Cancel'))
+          ]),
     );
   }
+
+  // save
+  save() {
+    ExpenseItem newExpense = ExpenseItem(
+      name: newExpenseNameController.text,
+      amount: newExpenseAmountController.text,
+      dateTime: DateTime.now(),
+    );
+    Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
+  }
+
+  // canel
+  cancel() {}
 
   @override
   Widget build(BuildContext context) {

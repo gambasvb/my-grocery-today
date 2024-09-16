@@ -76,7 +76,11 @@ class _MyHomePageState extends State<MyHomePage> {
       amount: newExpenseAmountController.text,
       dateTime: DateTime.now(),
     );
+
+    // add new expense
     Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
+
+    Navigator.pop(context);
   }
 
   // canel
@@ -84,12 +88,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    return Consumer<ExpenseData>(
+      builder: (context, value, child) => Scaffold(
+          backgroundColor: Colors.grey[300],
+          floatingActionButton: FloatingActionButton(
+            onPressed: addNewExpense,
+            child: const Icon(Icons.add),
+          ),
+          appBar: AppBar(
+            title: Text(widget.title),
+          ),
+          body: ListView.builder(
+            itemCount: value.getAllExpenseList().length,
+            itemBuilder: (context, index) => ListTile(
+              title: Text(value.getAllExpenseList()[index].name),
+              subtitle:
+                  Text(value.getAllExpenseList()[index].dateTime.toString()),
+              trailing: IconButton(
+                onPressed: () {
+                  value.deleteExpense(value.getAllExpenseList()[index]);
+                },
+                icon: Icon(Icons.delete),
+              ),
+            ),
+          )),
+    );
+  }
+
+  Scaffold MyScaffold(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to

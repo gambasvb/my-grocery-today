@@ -14,11 +14,13 @@ class ExpenseData extends ChangeNotifier{
   // add new expense
   void addNewExpense(ExpenseItem newExpense) {
     overAllExpenseList.add(newExpense);
+    notifyListeners();
   }
 
   // delete expnses
   void deleteExpense(ExpenseItem expense) {
     overAllExpenseList.remove(expense);
+    notifyListeners();
   }
 
   // get weekday (mot, tue, etc) from a dateTime object

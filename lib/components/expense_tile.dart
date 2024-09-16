@@ -16,7 +16,7 @@ class ExpenseTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(name),
-      subtitle: Text('$dateTime.toString()'),
+      subtitle: Text(dateTime.toString()),
       trailing: Text('Rp.$amount'),
       // IconButton(
       //   onPressed: () {

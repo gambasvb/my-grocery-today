@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:my_grocery_today/components/expense_summary.dart';
 import '../components/expense_tile.dart';
 import '../data/expense_data.dart';
 import 'package:provider/provider.dart';
@@ -28,16 +29,11 @@ class _MyHomePageState extends State<MyHomePage> {
   final newExpenseNameController = TextEditingController();
   final newExpenseAmountController = TextEditingController();
 
-  // void _incrementCounter() {
-  //   setState(() {
-  //     // This call to setState tells the Flutter framework that something has
-  //     // changed in this State, which causes it to rerun the build method below
-  //     // so that the display can reflect the updated values. If we changed
-  //     // _counter without calling setState(), then the build method would not be
-  //     // called again, and so nothing would appear to happen.
-  //     _counter++;
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ExpenseData>(context, listen: false).prepareData();
+  }
 
   void addNewExpense() {
     showDialog(
@@ -55,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               TextField(
                 controller: newExpenseAmountController,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   labelText: "Amount",
                 ),
@@ -100,23 +97,31 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Consumer<ExpenseData>(
       builder: (context, value, child) => Scaffold(
-          backgroundColor: Colors.grey[300],
-          floatingActionButton: FloatingActionButton(
-            onPressed: addNewExpense,
-            child: const Icon(Icons.add),
-          ),
-          appBar: AppBar(
-            title: Text(widget.title),
-          ),
-          body: ListView.builder(
-            itemCount: value.getAllExpenseList().length,
-            itemBuilder: (context, index) => ExpenseTile(
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:159513339.
-              name: value.getAllExpenseList()[index].name,
-              amount: value.getAllExpenseList()[index].amount,
-              dateTime: value.getAllExpenseList()[index].dateTime,
-            ),
-          )),
+        backgroundColor: Colors.grey[300],
+        floatingActionButton: FloatingActionButton(
+          onPressed: addNewExpense,
+          child: const Icon(Icons.add),
+        ),
+        // appBar: AppBar(
+        //   title: Text(widget.title),
+        // ),
+        body: ListView(
+          children: [
+            // ExpenseSummary(startOfWeek: DateTime.now()),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: value.getAllExpenseList().length,
+              itemBuilder: (context, index) => ExpenseTile(
+                // Suggested code may be subject to a license. Learn more: ~LicenseLog:159513339.
+                name: value.getAllExpenseList()[index].name,
+                amount: value.getAllExpenseList()[index].amount,
+                dateTime: value.getAllExpenseList()[index].dateTime,
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -168,5 +173,3 @@ class _MyHomePageState extends State<MyHomePage> {
   //   );
   // }
 }
-
-

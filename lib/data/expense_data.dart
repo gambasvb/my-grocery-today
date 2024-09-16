@@ -1,10 +1,32 @@
 import '../datetime/date_time_helper.dart';
 import 'package:flutter/material.dart';
 import '../models/expense_item.dart';
+import 'hive_database.dart';
 
-class ExpenseData extends ChangeNotifier{
+class ExpenseData extends ChangeNotifier {
   // list of all expenses
   List<ExpenseItem> overAllExpenseList = [];
+
+  // prepare data to display
+  final db = HiveDatabase();
+  void prepareData() {
+    if (db.readData().isNotEmpty) {
+      overAllExpenseList = db.readData();
+    }
+    notifyListeners();
+  }
+
+  // save data
+  void saveData() {
+    db.saveData(overAllExpenseList);
+  }
+
+  // delete data
+  void deleteData() {
+    // db.deleteData();
+    overAllExpenseList = [];
+    notifyListeners();
+  }
 
   // get expense list
   List<ExpenseItem> getAllExpenseList() {
@@ -80,19 +102,17 @@ class ExpenseData extends ChangeNotifier{
 
   */
   Map<String, double> calculationDailyExpenseSummary() {
-    Map<String,double> dailyExpenseSummary ={
+    Map<String, double> dailyExpenseSummary = {};
 
-    };
-
-    for (var expense in overAllExpenseList){
+    for (var expense in overAllExpenseList) {
       String date = convertDateTimeToString(expense.dateTime);
       double amount = double.parse(expense.amount);
 
-      if(dailyExpenseSummary.containsKey(date)){
+      if (dailyExpenseSummary.containsKey(date)) {
         double currentAmount = dailyExpenseSummary[date]!;
         dailyExpenseSummary[date] = currentAmount + amount;
-      }else{
-        dailyExpenseSummary.addAll({date:amount});
+      } else {
+        dailyExpenseSummary.addAll({date: amount});
       }
     }
     return dailyExpenseSummary;

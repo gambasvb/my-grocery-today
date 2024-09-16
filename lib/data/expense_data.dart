@@ -1,6 +1,6 @@
+import '../datetime/date_time_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/datetime/date_time_helper.dart';
-import 'package:myapp/models/expense_item.dart';
+import '../models/expense_item.dart';
 
 class ExpenseData extends ChangeNotifier{
   // list of all expenses

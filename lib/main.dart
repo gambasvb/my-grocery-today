@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/data/expense_data.dart';
-import 'package:myapp/pages/home_page.dart';
+import './data/expense_data.dart';
+import './pages/home_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'My Grocery Today'),
     ), 
       
     );

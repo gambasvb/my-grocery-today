@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/data/expense_data.dart';
+import '../components/expense_tile.dart';
+import '../data/expense_data.dart';
 import 'package:provider/provider.dart';
 
 import '../models/expense_item.dart';
@@ -70,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // save
-  save() {
+  void save() {
     ExpenseItem newExpense = ExpenseItem(
       name: newExpenseNameController.text,
       amount: newExpenseAmountController.text,
@@ -81,10 +82,19 @@ class _MyHomePageState extends State<MyHomePage> {
     Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
 
     Navigator.pop(context);
+    clear();
   }
 
   // canel
-  cancel() {}
+  void cancel() {
+    Navigator.pop(context);
+    clear();
+  }
+
+  void clear() {
+    newExpenseNameController.clear();
+    newExpenseAmountController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,16 +110,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           body: ListView.builder(
             itemCount: value.getAllExpenseList().length,
-            itemBuilder: (context, index) => ListTile(
-              title: Text(value.getAllExpenseList()[index].name),
-              subtitle:
-                  Text(value.getAllExpenseList()[index].dateTime.toString()),
-              trailing: IconButton(
-                onPressed: () {
-                  value.deleteExpense(value.getAllExpenseList()[index]);
-                },
-                icon: const Icon(Icons.delete),
-              ),
+            itemBuilder: (context, index) => ExpenseTile(
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:159513339.
+              name: value.getAllExpenseList()[index].name,
+              amount: value.getAllExpenseList()[index].amount,
+              dateTime: value.getAllExpenseList()[index].dateTime,
             ),
           )),
     );
@@ -163,3 +168,5 @@ class _MyHomePageState extends State<MyHomePage> {
   //   );
   // }
 }
+
+

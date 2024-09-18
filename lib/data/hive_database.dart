@@ -17,6 +17,7 @@ class HiveDatabase {
       allExpensesFormatted.add(expenseFormatted);
     }
     _myBox.put("ALL_EXPENSES", allExpensesFormatted);
+    print({"ALL_EXPENSES": allExpensesFormatted,"xxx":"xxxx"});
   }
 
   // read data
@@ -28,8 +29,8 @@ class HiveDatabase {
       String amount = savedExpenses[i][1];
       DateTime dateTime = savedExpenses[i][2];
 
-      ExpenseItem expense = ExpenseItem(
-          name: name, amount: amount, dateTime: dateTime);
+      ExpenseItem expense =
+          ExpenseItem(name: name, amount: amount, dateTime: dateTime);
       allExpenses.add(expense);
       // ExpenseItem expense = ExpenseItem(
       //     name: savedExpenses[i][0],

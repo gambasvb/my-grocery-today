@@ -19,6 +19,7 @@ class ExpenseData extends ChangeNotifier {
   // save data
   void saveData() {
     db.saveData(overAllExpenseList);
+    notifyListeners();
   }
 
   // delete data
@@ -36,6 +37,7 @@ class ExpenseData extends ChangeNotifier {
   // add new expense
   void addNewExpense(ExpenseItem newExpense) {
     overAllExpenseList.add(newExpense);
+    
     notifyListeners();
   }
 

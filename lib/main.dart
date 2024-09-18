@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme:
-              ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 72, 71, 75)),
+              ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 85, 63, 149)),
           useMaterial3: true,
         ),
         home: const MyHomePage(title: 'My Grocery Today'),

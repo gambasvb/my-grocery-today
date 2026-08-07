@@ -1,35 +1,47 @@
 import 'individual_bar.dart';
 
+/// Menyimpan data untuk setiap hari dalam grafik batang.
 class BarData {
-  final double sunAmount;
-  final double monAmount;
-  final double tueAmount;
-  final double wedAmount;
-  final double thuAmount;
-  final double friAmount;
-  final double satAmount;
+  final double _sunAmount;
+  final double _monAmount;
+  final double _tueAmount;
+  final double _wedAmount;
+  final double _thuAmount;
+  final double _friAmount;
+  final double _satAmount;
 
+  /// Membuat instance BarData dengan jumlah untuk setiap hari.
   BarData({
-    required this.sunAmount,
-    required this.monAmount,
-    required this.tueAmount,
-    required this.wedAmount,
-    required this.thuAmount,
-    required this.friAmount,
-    required this.satAmount,
-  });
+    required double sunAmount,
+    required double monAmount,
+    required double tueAmount,
+    required double wedAmount,
+    required double thuAmount,
+    required double friAmount,
+    required double satAmount,
+  })  : _sunAmount = sunAmount,
+        _monAmount = monAmount,
+        _tueAmount = tueAmount,
+        _wedAmount = wedAmount,
+        _thuAmount = thuAmount,
+        _friAmount = friAmount,
+        _satAmount = satAmount;
 
-  List<IndividualBar> barData = [];
-  //initialize bar data
+  List<IndividualBar> _barData = [];
+
+  /// Mendapatkan data batang yang telah diinisialisasi.
+  List<IndividualBar> get barData => _barData;
+
+  /// Menginisialisasi data batang dengan jumlah untuk setiap hari dalam seminggu.
   void initializeBarData() {
-    barData = [
-      IndividualBar(x: 0, y: sunAmount),
-      IndividualBar(x: 1, y: monAmount),
-      IndividualBar(x: 2, y: tueAmount),
-      IndividualBar(x: 3, y: wedAmount),
-      IndividualBar(x: 4, y: thuAmount),
-      IndividualBar(x: 5, y: friAmount),
-      IndividualBar(x: 6, y: satAmount),
+    _barData = [
+      IndividualBar(x: 0, y: _sunAmount),
+      IndividualBar(x: 1, y: _monAmount),
+      IndividualBar(x: 2, y: _tueAmount),
+      IndividualBar(x: 3, y: _wedAmount),
+      IndividualBar(x: 4, y: _thuAmount),
+      IndividualBar(x: 5, y: _friAmount),
+      IndividualBar(x: 6, y: _satAmount),
     ];
   }
 }

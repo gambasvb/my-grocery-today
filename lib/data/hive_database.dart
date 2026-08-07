@@ -2,51 +2,36 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/expense_item.dart';
 
+/// Helper database Hive untuk persistensi pengeluaran.
 class HiveDatabase {
-  // refference our box
-  final _myBox = Hive.box("expenses_database");
-  // write data
+  // Referensi ke box Hive
+  final _myBox = Hive.box('expenses_database');
+
+  /// Menyimpan semua pengeluaran ke database.
+  /// 
+  /// [allExpense] adalah daftar ExpenseItem yang akan disimpan.
   void saveData(List<ExpenseItem> allExpense) {
-    List<List<dynamic>> allExpensesFormatted = [];
-    for (var expense in allExpense) {
-      List<dynamic> expenseFormatted = [
-        expense.name,
-        expense.amount,
-        expense.dateTime
-      ];
-      allExpensesFormatted.add(expenseFormatted);
-    }
-    _myBox.put("ALL_EXPENSES", allExpensesFormatted);
-    print({"ALL_EXPENSES": allExpensesFormatted,"xxx":"xxxx"});
+    final allExpensesFormatted = allExpense
+        .map((expense) => [
+              expense.name,
+              expense.amount,
+              expense.dateTime,
+            ])
+        .toList();
+    _myBox.put('ALL_EXPENSES', allExpensesFormatted);
   }
 
-  // read data
+  /// Membaca semua pengeluaran dari database.
+  /// 
+  /// Mengembalikan List<ExpenseItem> dari data yang tersimpan.
   List<ExpenseItem> readData() {
-    List savedExpenses = _myBox.get("ALL_EXPENSES") ?? [];
-    List<ExpenseItem> allExpenses = [];
-    for (int i = 0; i < savedExpenses.length; i++) {
-      String name = savedExpenses[i][0];
-      String amount = savedExpenses[i][1];
-      DateTime dateTime = savedExpenses[i][2];
-
-      ExpenseItem expense =
-          ExpenseItem(name: name, amount: amount, dateTime: dateTime);
-      allExpenses.add(expense);
-      // ExpenseItem expense = ExpenseItem(
-      //     name: savedExpenses[i][0],
-      //     amount: savedExpenses[i][1],
-      //     dateTime: savedExpenses[i][2]);
-      // allExpenses.add(expense);
-    }
-    return allExpenses;
+    final savedExpenses = _myBox.get('ALL_EXPENSES') ?? <List<dynamic>>[];
+    return savedExpenses
+        .map((expense) => ExpenseItem(
+              name: expense[0] as String,
+              amount: (expense[1] as num).toDouble(),
+              dateTime: expense[2] as DateTime,
+            ))
+        .toList();
   }
-
-  // delete data
-  // void deleteData() {
-  //   try {
-  //     _myBox.delete("ALL_EXPENSES");
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
 }

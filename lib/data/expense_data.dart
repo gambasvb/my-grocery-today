@@ -3,119 +3,79 @@ import 'package:flutter/material.dart';
 import '../models/expense_item.dart';
 import 'hive_database.dart';
 
+/// Provider untuk mengelola state data pengeluaran.
 class ExpenseData extends ChangeNotifier {
-  // list of all expenses
-  List<ExpenseItem> overAllExpenseList = [];
+  // Daftar semua pengeluaran
+  List<ExpenseItem> _overAllExpenseList = [];
 
-  // prepare data to display
-  final db = HiveDatabase();
+  // Instance database
+  final HiveDatabase _db = HiveDatabase();
+
+  /// Memuat data dari database.
   void prepareData() {
-    if (db.readData().isNotEmpty) {
-      overAllExpenseList = db.readData();
-    }
+    _overAllExpenseList = _db.readData();
     notifyListeners();
   }
 
-  // save data
+  /// Menyimpan daftar pengeluaran saat ini ke database.
   void saveData() {
-    db.saveData(overAllExpenseList);
+    _db.saveData(_overAllExpenseList);
     notifyListeners();
   }
 
-  // delete data
+  /// Menghapus semua pengeluaran dari daftar.
   void deleteData() {
-    // db.deleteData();
-    overAllExpenseList = [];
+    _overAllExpenseList = [];
     notifyListeners();
   }
 
-  // get expense list
-  List<ExpenseItem> getAllExpenseList() {
-    return overAllExpenseList;
-  }
+  /// Mendapatkan daftar semua pengeluaran.
+  List<ExpenseItem> getAllExpenseList() => _overAllExpenseList;
 
-  // add new expense
+  /// Menambahkan pengeluaran baru ke daftar.
   void addNewExpense(ExpenseItem newExpense) {
-    overAllExpenseList.add(newExpense);
-    
+    _overAllExpenseList.add(newExpense);
     notifyListeners();
   }
 
-  // delete expnses
+  /// Menghapus pengeluaran dari daftar.
   void deleteExpense(ExpenseItem expense) {
-    overAllExpenseList.remove(expense);
+    _overAllExpenseList.remove(expense);
     notifyListeners();
   }
 
-  // get weekday (mot, tue, etc) from a dateTime object
+  /// Mendapatkan nama hari untuk DateTime tertentu.
   String getDayName(DateTime dateTime) {
-    switch (dateTime.weekday) {
-      case 1:
-        return "Mon";
-      case 2:
-        return "Tue";
-      case 3:
-        return "Wed";
-      case 4:
-        return "Thu";
-      case 5:
-        return "Fri";
-      case 6:
-        return "Sat";
-      case 7:
-        return "Sun";
-      default:
-        return "";
-    }
+    const days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
+    return days[dateTime.weekday - 1];
   }
 
-  // get the date for the start of the week (sunday)
+  /// Mendapatkan tanggal awal minggu (Minggu).
   DateTime startOfWeekDate() {
-    DateTime? startOfWeek;
-
-    // get today date
-    DateTime today = DateTime.now();
-
-    // go backward from today to find sunday
+    final today = DateTime.now();
     for (int i = 0; i < 7; i++) {
-      if (getDayName(today.subtract(Duration(days: i))) == 'Sun') {
-        startOfWeek = today.subtract(Duration(days: i));
+      if (getDayName(today.subtract(Duration(days: i))) == 'Min') {
+        return today.subtract(Duration(days: i));
       }
     }
-    return startOfWeek!;
+    throw StateError('Tidak dapat menemukan awal minggu');
   }
 
-  /*
-  conver all list of expenses into a daily expnses summary
-  e.g
-
-  overallExpenseList = 
-  [
-    [food,20230130,$10],
-    [hat,20230130,$15],
-    [drink,20230131,$1],
-    
-  ]
-
-  dailyExpenseSummary = [
-    [20230130,$25],
-    [20230131,$1],
-  ]
-
-  */
+  /// Mengkonversi semua pengeluaran menjadi ringkasan harian.
+  /// 
+  /// Mengembalikan Map dengan kunci string tanggal dan nilai total jumlah.
   Map<String, double> calculationDailyExpenseSummary() {
-    Map<String, double> dailyExpenseSummary = {};
+    final dailyExpenseSummary = <String, double>{};
 
-    for (var expense in overAllExpenseList) {
-      String date = convertDateTimeToString(expense.dateTime);
-      double amount = double.parse(expense.amount);
+    for (var expense in _overAllExpenseList) {
+      final date = convertDateTimeToString(expense.dateTime);
+      final amount = expense.amount;
 
-      if (dailyExpenseSummary.containsKey(date)) {
-        double currentAmount = dailyExpenseSummary[date]!;
-        dailyExpenseSummary[date] = currentAmount + amount;
-      } else {
-        dailyExpenseSummary.addAll({date: amount});
-      }
+      dailyExpenseSummary.update(
+        date,
+        (currentAmount) => currentAmount + amount,
+        ifAbsent: () => amount,
+      );
     }
     return dailyExpenseSummary;
   }

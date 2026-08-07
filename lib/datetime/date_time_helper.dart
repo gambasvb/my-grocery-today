@@ -1,14 +1,10 @@
+/// Mengkonversi DateTime ke string dengan format YYYYMMDD.
+/// 
+/// [dateTime] adalah DateTime yang akan dikonversi.
+/// Mengembalikan string dalam format tahun, bulan, dan hari tanpa separator.
 String convertDateTimeToString(DateTime dateTime) {
-  String year = dateTime.year.toString();
-  String month = dateTime.month.toString();
-  if (month.length == 1) {
-    month = '0$month';
-  }
-  String day = dateTime.day.toString();
-  if (day.length == 1) {
-    day = '0$day';
-  }
-
-  String yyyymmdd = year + month + day;
-  return yyyymmdd;
+  final year = dateTime.year.toString();
+  final month = dateTime.month.toString().padLeft(2, '0');
+  final day = dateTime.day.toString().padLeft(2, '0');
+  return '$year$month$day';
 }

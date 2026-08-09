@@ -1,33 +1,41 @@
 ```
-# Dependencies
-.pub/
+# Flutter/Dart specific
+.dart_tool/
 .build/
+.flutter-plugins
+.flutter-plugin-dependencies
 .packages
 
-# Build artifacts
-build/
-.dart_tool/
+# Dependencies
+vendor/
+.libs/
 
-# Logs
-*.log
-
-# Environment
-.env
-.env.local
-*.env.*
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
+# Generated plugin code
+generated_plugin_registrant.*
 
 # Coverage
 coverage/
-htmlcov/
-.coverage
+
+# Temporary directories
+temp/
+tmp/
+
+# Logs
+*.log
+**/logs
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE specific
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
 ```
